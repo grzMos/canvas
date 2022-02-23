@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8" />
+    <style>
+        canvas {
+            border: 1px solid #d3d3d3;
+        }
+
+        #players {
+            direction: inline;
+            position: relative;
+            width: 300px;
+            height: 200px;
+            text-align: center;
+            background: beige;
+        }
+
+        input {
+            margin: 5px;
+            border-radius: 5px;
+            background: rgb(168, 168, 168);
+        }
+
+        button {
+            margin: 15px;
+            width: 70px;
+            border-radius: 5px;
+        }
+
+        #okr {
+            position: absolute;
+            top: 120px;
+            left: 290px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            display: none;
+            text-align: center;
+        }
+    </style>
+    <script>
+
+        var myGamePiece;
+        var myGamePiece2;
+        var myGamePiece3;
+        var myGamePiece4;
+        function startGame() {
+            myGamePiece = new component(1, 1, "red", 225, 205);
+            myGamePiece2 = new component2(1, 1, "green", 225, 215);
+            myGamePiece3 = new component3(1, 1, "blue", 225, 225);
+            myGamePiece4 = new component4(1, 1, "yellow", 225, 235);
+            myGameArea.ile();
+        }
+
+        var myGameArea = {
+            canvas: document.createElement("canvas"),
+            bool: true,
+            bool2: true,
+            bool3: true,
+            bool4: true,
+            okr1: 0,
+            okr2: 0,
+            okr3: 0,
+            okr4: 0,
+            tab: [],
+            left: 0,
+            myFunction: function (event) {
+                this.s1 = event.keyCode
+                var sn1 = event.key
+                if (this.s1 < 49 || this.s1 > 90)
+                    document.getElementById("txt1").value = "wybrałes " + sn1
+                else
+                    document.getElementById("txt1").value = "wybrałes "
+            },
+            myFunction2: function (event) {
+                this.s2 = event.keyCode
+                var sn2 = event.key
+                console.log(sn2)
+                if (this.s2 < 49 || this.s2 > 90)
+                    document.getElementById("txt2").value = "wybrałes " + sn2
+                else
+                    document.getElementById("txt2").value = "wybrałes "
+            },
+            myFunction3: function (event) {
+                this.s3 = event.keyCode
+                var sn3 = event.key
+                if (this.s3 < 49 || this.s3 > 90)
+                    document.getElementById("txt3").value = "wybrałes " + sn3
+                else
+                    document.getElementById("txt3").value = "wybrałes "
+            },
+            myFunction4: function (event) {
+                this.s4 = event.keyCode
+                var sn4 = event.key
+                if (this.s4 < 49 || this.s4 > 90)
+                    document.getElementById("txt4").value = "wybrałes " + sn4
+                else
+                    document.getElementById("txt4").value = "wybrałes "
+            },
+            Okr: function () {
+                this.c = parseInt(document.getElementById("txt5").value)
+                this.left = this.c
+                document.getElementById("okr").innerHTML = "<h3>" + this.c + "</h3>"
+            },
+            ile: function () {
+                var bt = document.getElementById("bt")
+                bt.addEventListener("click", function () {
+                    var txt1 = document.getElementById("txt1")
+                    var player1 = document.getElementById("gr1")
+                    if (player1.checked) {
+                        // console.log(txt1.value)
+                        this.interval = setInterval(updateGameArea, 5);
+                    } else {
+                        myGameArea.bool = false
+                    }
+                    var txt2 = document.getElementById("txt2")
+                    var player2 = document.getElementById("gr2")
+                    if (player2.checked) {
+                        this.interval2 = setInterval(updateGameArea2, 5);
+                    } else {
+                        myGameArea.bool2 = false
+                    }
+                    var txt3 = document.getElementById("txt3")
+                    var player3 = document.getElementById("gr3")
+                    if (player3.checked) {
+                        this.interval3 = setInterval(updateGameArea3, 5);
+                    } else {
+                        myGameArea.bool3 = false
+                    }
+                    var txt4 = document.getElementById("txt4")
+                    var player4 = document.getElementById("gr4")
+                    if (player4.checked) {
+                        this.interval4 = setInterval(updateGameArea4, 5);
+                    } else {
+                        myGameArea.bool4 = false
+                    }
+                    document.getElementById("players").style.display = "none";
+                    document.getElementById("okr").style.display = "block";
+                    myGameArea.Okr();
+                    myGameArea.start();
+                    myGameArea.draw();
+                })
+            },
+            start: function () {
+                this.canvas.width = 600;
+                this.canvas.height = 270;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                this.frameNo = 0;
+                this.tab[0] = 0
+                this.tab[1] = 0
+                window.addEventListener('keydown', function (e) {
+                    e.preventDefault();
+                    myGameArea.keys = (myGameArea.keys || []);
+                    myGameArea.keys[e.keyCode] = (e.type == "keydown");
+                })
+                window.addEventListener('keyup', function (e) {
+                    myGameArea.keys[e.keyCode] = (e.type == "keydown");
+                })
+            },
+            draw: function () {
+                this.img = new Image();
+                this.img.src = "grass.jpg"
+                this.img.onload = function () {
+                    this.context = myGameArea.context;
+                    this.img = new Image();
+                    this.img.src = "grass.jpg"
+                    this.pat = this.context.createPattern(this.img, "repeat")
+                    this.context.rect(0, 0, 600, 270)
+                    this.context.fillStyle = this.pat
+                    this.context.fill();
+                    this.context.beginPath();
+                    this.context.arc(135, 135, 129, Math.PI / 2, Math.PI * 1.5);
+                    this.context.arc(465, 135, 129, Math.PI * 1.5, Math.PI / 2);
+                    this.context.fillStyle = "white"
+                    this.context.fill();
+                    this.context.lineWidth = 8
+                    this.context.closePath();
+                    this.context.strokeStyle = "#000000";
+                    this.context.stroke();
+                    this.context.beginPath();
+                    this.context.arc(170, 135, 60, Math.PI / 2, Math.PI * 1.5);
+                    this.context.arc(430, 135, 60, Math.PI * 1.5, Math.PI / 2);
+                    this.context.fillStyle = this.pat
+                    this.context.fill();
+                    this.context.closePath();
+                    this.context.stroke();
+                    this.context.fillStyle = "gray"
+                    this.context.fillRect(222, 197, 1, 65);
+                    // console.log(this.context.getImageData(220, 197, 1, 1).data);
+                }
+            },
+            sort: function () {
+                if (myGameArea.tab[0] > myGameArea.tab[1]) {
+                    this.left = this.c - myGameArea.tab[0]
+
+                }
+            },
+            win: function () {
+                console.log(myGameArea.bool, myGameArea.bool2, myGameArea.bool3, myGameArea.bool4)
+                if (myGameArea.bool == true && myGameArea.bool2 == false && myGameArea.bool3 == false && myGameArea.bool4 == false) {
+                    alert("Wygrał Gracz1")
+                    myGameArea.bool = false
+                }
+                if (myGameArea.bool == false && myGameArea.bool2 == true && myGameArea.bool3 == false && myGameArea.bool4 == false) {
+                    alert("Wygrał Gracz2")
+                    myGameArea.bool2 = false
+                }
+                if (myGameArea.bool == false && myGameArea.bool2 == false && myGameArea.bool3 == true && myGameArea.bool4 == false) {
+                    alert("Wygrał Gracz3")
+                    myGameArea.bool3 = false
+                }
+                if (myGameArea.bool == false && myGameArea.bool2 == false && myGameArea.bool3 == false && myGameArea.bool4 == true) {
+                    alert("Wygrał Gracz4")
+                    myGameArea.bool4 = false
+                }
+            },
+        }
+        function component(width, height, color, x, y) {
+            this.width = width;
+            this.height = height;
+            this.speed = 0;
+            this.angle = Math.PI / 2;
+            this.moveAngle = 0;
+            this.xw = 0;
+            this.yw = 0;
+            this.x = x;
+            this.y = y;
+            this.i = 0
+            this.update = function () {
+                // console.log(myGameArea.left)
+                // console.log(this.i)
+                this.context = myGameArea.context;
+                this.context.beginPath();
+                this.context.moveTo(this.xw, this.yw)
+                this.context.lineTo(this.x, this.y)
+                this.context.lineWidth = 1
+                this.context.closePath();
+                this.context.strokeStyle = color;
+                this.context.stroke()
+                this.context.fillStyle = "gray"
+                this.context.fillRect(222, 197, 5, 65);
+                // console.log(this.x, this.y)
+                if (Math.floor(this.x) == 222 & this.y > 197 & this.y < 270) {
+                    myGameArea.okr1++
+                    myGameArea.tab.unshift(myGameArea.okr1)
+                    myGameArea.sort()
+                    document.getElementById("okr").innerHTML = "<h3>" + myGameArea.left + "</h3>"
+                    console.log(myGameArea.left)
+                    if (myGameArea.left == 0) {
+                        alert("Gracz1 wygrał")
+                        myGameArea.bool = false
+                        myGameArea.bool2 = false
+                        myGameArea.bool3 = false
+                        myGameArea.bool4 = false
+                    }
+                }
+                if (this.context.getImageData(this.x, this.y, 1, 1).data[0] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[1] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[2] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[3] == 255) {
+                    document.getElementById("losers").innerHTML += "<p>gr1 odpadł</p>"
+                    myGameArea.bool = false
+                    myGameArea.win()
+                }
+            }
+            this.newPos = function () {
+                this.xw = this.x
+                this.yw = this.y
+                this.angle += this.moveAngle * Math.PI / 180;
+                this.angle1 = this.angle
+                // console.log(this.angle)
+                this.x += this.speed * Math.sin(this.angle);
+                this.y -= this.speed * Math.cos(this.angle);
+
+            }
+        }
+        function updateGameArea() {
+            if (myGameArea.bool) {
+                // console.log(myGameArea.s1)
+                myGamePiece.moveAngle = 0;
+                myGamePiece.speed = 1;
+                if (myGameArea.keys && myGameArea.keys[myGameArea.s1]) { myGamePiece.moveAngle = -1; }
+                myGamePiece.newPos();
+                myGamePiece.update();
+            }
+        }
+        function component2(width, height, color, x, y) {
+            this.width = width;
+            this.height = height;
+            this.speed = 0;
+            this.angle = Math.PI / 2;
+            this.moveAngle = 0;
+            this.xw = 0;
+            this.yw = 0;
+            this.x = x;
+            this.y = y;
+            this.i = 0
+            this.update2 = function () {
+                // console.log(this.i)
+                this.context = myGameArea.context;
+                this.context.beginPath();
+                this.context.moveTo(this.xw, this.yw)
+                this.context.lineTo(this.x, this.y)
+                this.context.lineWidth = 1
+                this.context.closePath();
+                this.context.strokeStyle = color;
+                this.context.stroke()
+                this.context.fillStyle = "gray"
+                this.context.fillRect(222, 197, 5, 65);
+                if (Math.floor(this.x) == 222 & this.y > 197 & this.y < 270) {
+                    myGameArea.okr2++
+                    myGameArea.tab.unshift(myGameArea.okr1)
+                    console.log(myGameArea.left)
+                    myGameArea.sort()
+                    document.getElementById("okr").innerHTML = "<h3>" + myGameArea.left + "</h3>"
+                    if (myGameArea.left == 0) {
+                        myGameArea.bool = false
+                        myGameArea.bool2 = false
+                        myGameArea.bool3 = false
+                        myGameArea.bool4 = false
+                        alert("Gracz2 wygrał")
+                    }
+                }
+                if (this.context.getImageData(this.x, this.y, 1, 1).data[0] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[1] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[2] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[3] == 255) {
+                    document.getElementById("losers").innerHTML += "<p>gr2 odpadł</p>"
+                    myGameArea.bool2 = false
+                    myGameArea.win()
+                }
+            }
+            this.newPos2 = function () {
+                this.xw = this.x
+                this.yw = this.y
+                this.angle += this.moveAngle * Math.PI / 180;
+                // console.log(this.angle)
+                this.x += this.speed * Math.sin(this.angle);
+                this.y -= this.speed * Math.cos(this.angle);
+
+            }
+        }
+        function updateGameArea2() {
+            if (myGameArea.bool2) {
+                myGamePiece2.moveAngle = 0;
+                myGamePiece2.speed = 1;
+                if (myGameArea.keys && myGameArea.keys[myGameArea.s2]) { myGamePiece2.moveAngle = -1; }
+                myGamePiece2.newPos2();
+                myGamePiece2.update2();
+            }
+        }
+        function component3(width, height, color, x, y) {
+            this.width = width;
+            this.height = height;
+            this.speed = 0;
+            this.angle = Math.PI / 2;
+            this.moveAngle = 0;
+            this.xw = 0;
+            this.yw = 0;
+            this.x = x;
+            this.y = y;
+            this.i = 0
+            this.update3 = function () {
+                this.context = myGameArea.context;
+                this.context.beginPath();
+                this.context.moveTo(this.xw, this.yw)
+                this.context.lineTo(this.x, this.y)
+                this.context.lineWidth = 1
+                this.context.closePath();
+                this.context.strokeStyle = color;
+                this.context.stroke()
+                this.context.fillStyle = "gray"
+                this.context.fillRect(222, 197, 5, 65);
+                if (Math.floor(this.x) == 222 & this.y > 197 & this.y < 270) {
+                    myGameArea.okr3++
+                    myGameArea.tab.unshift(myGameArea.okr3)
+
+                    myGameArea.sort()
+                    document.getElementById("okr").innerHTML = "<h3>" + myGameArea.left + "</h3>"
+                    console.log(myGameArea.left)
+                    if (myGameArea.left == 0) {
+                        myGameArea.bool = false
+                        myGameArea.bool2 = false
+                        myGameArea.bool3 = false
+                        myGameArea.bool4 = false
+                        alert("Gracz3 wygrał")
+                    }
+                }
+                if (this.context.getImageData(this.x, this.y, 1, 1).data[0] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[1] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[2] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[3] == 255) {
+                    document.getElementById("losers").innerHTML += "<p>gr3 odpadł</p>"
+                    myGameArea.bool3 = false
+                    myGameArea.win()
+                }
+            }
+            this.newPos3 = function () {
+                this.xw = this.x
+                this.yw = this.y
+                this.angle += this.moveAngle * Math.PI / 180;
+                this.x += this.speed * Math.sin(this.angle);
+                this.y -= this.speed * Math.cos(this.angle);
+
+            }
+        }
+        function updateGameArea3() {
+            if (myGameArea.bool3) {
+                myGamePiece3.moveAngle = 0;
+                myGamePiece3.speed = 1;
+                if (myGameArea.keys && myGameArea.keys[myGameArea.s3]) { myGamePiece3.moveAngle = -1; }
+                myGamePiece3.newPos3();
+                myGamePiece3.update3();
+            }
+        }
+        function component4(width, height, color, x, y) {
+            this.width = width;
+            this.height = height;
+            this.speed = 0;
+            this.angle = Math.PI / 2;
+            this.moveAngle = 0;
+            this.xw = 0;
+            this.yw = 0;
+            this.x = x;
+            this.y = y;
+            this.i = 0
+            this.update4 = function () {
+                this.context = myGameArea.context;
+                this.context.beginPath();
+                this.context.moveTo(this.xw, this.yw)
+                this.context.lineTo(this.x, this.y)
+                this.context.lineWidth = 1
+                this.context.closePath();
+                this.context.strokeStyle = color;
+                this.context.stroke()
+                this.context.fillStyle = "gray"
+                this.context.fillRect(222, 197, 5, 65);
+                if (Math.floor(this.x) == 222 & this.y > 197 & this.y < 270) {
+                    myGameArea.okr4++
+                    myGameArea.tab.unshift(myGameArea.okr4)
+
+                    myGameArea.sort()
+                    document.getElementById("okr").innerHTML = "<h3>" + myGameArea.left + "</h3>"
+                    console.log(myGameArea.left)
+                    console.log(myGameArea.okr4)
+                    if (myGameArea.left == 0) {
+                        myGameArea.bool = false
+                        myGameArea.bool2 = false
+                        myGameArea.bool3 = false
+                        myGameArea.bool4 = false
+                        alert("Gracz4 wygrał")
+                    }
+                }
+                if (this.context.getImageData(this.x, this.y, 1, 1).data[0] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[1] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[2] == 0 && this.context.getImageData(this.x, this.y, 1, 1).data[3] == 255) {
+                    document.getElementById("losers").innerHTML += "<p>gr4 odpadł</p>"
+                    myGameArea.bool4 = false
+                    myGameArea.win()
+                }
+            }
+            this.newPos4 = function () {
+                this.xw = this.x
+                this.yw = this.y
+                this.angle += this.moveAngle * Math.PI / 180;
+                this.x += this.speed * Math.sin(this.angle);
+                this.y -= this.speed * Math.cos(this.angle);
+
+            }
+        }
+        function updateGameArea4() {
+            if (myGameArea.bool4) {
+                myGamePiece4.moveAngle = 0;
+                myGamePiece4.speed = 1;
+                if (myGameArea.keys && myGameArea.keys[myGameArea.s4]) { myGamePiece4.moveAngle = -1; }
+                myGamePiece4.newPos4();
+                myGamePiece4.update4();
+            }
+        }
+    </script>
+</head>
+
+<body onload="startGame()">
+    <div id="players">
+        <form>
+            <em style="color:#FF0000">GR1</em> <input type="checkbox" id="gr1">Skręcanie:<input type="text" id="txt1"
+                onkeydown="myGameArea.myFunction(event)"><br>
+            <em style="color:#00FF00">GR2</em> <input type="checkbox" id="gr2">Skręcanie:<input type="text" id="txt2"
+                onkeydown="myGameArea.myFunction2(event)"><br>
+            <em style="color:#0000FF">GR3</em> <input type="checkbox" id="gr3">Skręcanie:<input type="text" id="txt3"
+                onkeydown="myGameArea.myFunction3(event)"><br>
+            <em style="color:#FFF000">GR4</em> <input type="checkbox" id="gr4">Skręcanie:<input type="text" id="txt4"
+                onkeydown="myGameArea.myFunction4(event)"><br>Okrążenia<input type="text" id="txt5" value="3"><br>
+        </form>
+        <button id="bt">Graj</button>
+    </div>
+    <div id="losers">
+    </div>
+    <div id="okr"></div>
+</body>
+
+</html>
